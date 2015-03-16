@@ -1,0 +1,17 @@
+{
+    "prix": 20, 
+    "users": [
+        {
+            "account": 641, 
+            "name": "Antoine"
+        }, 
+        {
+            "account": 350, 
+            "name": "Pauline"
+        }, 
+        {
+            "account": -40, 
+            "name": "Abd"
+        }
+    ]
+}
