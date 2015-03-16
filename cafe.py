@@ -33,14 +33,22 @@ class myEmployeeForm(npyscreen.ActionFormMinimal):
        self.Affichage = self.add(npyscreen.TitlePager, values=sous, use_two_lines=True,begin_entry_at=0, name='Comptes',editable=False)
     def on_ok(self):
         test = self.Name.value
+        user = []
+        with open("user.json", "r") as data_file:
+            user = json.load(data_file)
+        utilisateurs = []
+        sous = []
+        for util in user['users']:
+            utilisateurs.append(util['name'])
         test = utilisateurs.index(test)
         user['users'][test]['account']=user['users'][test]['account']-user['prix']
-        sous = []
         for util in user['users']:
             sous.append(util['name'] + " " + str(util['account']*0.01))
         self.Affichage.values = sous
         self.Name.value = ''
         self.Affichage.display()
+        with open("user.json", "w") as outfile:
+          json.dump(user, outfile, indent=4)
 
         
 
@@ -52,9 +60,7 @@ class MyApplication(npyscreen.NPSAppManaged):
        #with open("user.json", "r") as data_file:
         #   user = json.load(data_file)
        #user['users'][0]['account'] = user['users'][0]['account'] + 1
-       with open("user.json", "w") as outfile:
-          json.dump(user, outfile, indent=4)
-       
+       pass
 
 if __name__ == '__main__':
     with open("user.json", "r") as data_file:
