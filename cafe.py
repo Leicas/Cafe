@@ -8,7 +8,7 @@ class Listepers(npyscreen.Autocomplete):
         self.handlers.update({curses.ascii.NL: self.auto_complete})
         self.handlers.update({curses.ascii.CR: self.auto_complete})
     def auto_complete(self, input):
-        possibilities = filter(lambda x: x.startswith(self.value), utilisateurs)
+        possibilities = filter(lambda x: x.upper().startswith(self.value.upper()), utilisateurs)
         if len(possibilities) is 1:
              if self.value != possibilities[0]:
                     self.value = possibilities[0]
