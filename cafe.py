@@ -42,8 +42,15 @@ class myEmployeeForm(npyscreen.ActionFormMinimal):
             utilisateurs.append(util['name'])
         test = utilisateurs.index(test)
         user['users'][test]['account']=user['users'][test]['account']-user['prix']
+        user['nombre'] = user['nombre'] + 1
+        total = 0
         for util in user['users']:
             sous.append(util['name'] + " " + str(util['account']*0.01))
+            total = total + util['account']
+
+        sous.append("----------") 
+        sous.append("Balance: " + str(-total*0.01))
+        sous.append("Nombre de cafe: " + str(user['nombre']))
         self.Affichage.values = sous
         self.Name.value = ''
         self.Affichage.display()
@@ -67,10 +74,14 @@ if __name__ == '__main__':
         user = json.load(data_file)
     utilisateurs = []
     sous = []
+    total = 0
     for util in user['users']:
         utilisateurs.append(util['name'])
         sous.append(util['name'] + " " + str(util['account']*0.01))
-                            
+        total = total + util['account']
+    sous.append("----------") 
+    sous.append("Balance: " + str(-total*0.01))
+    sous.append("Nombre de cafe: " + str(user['nombre']))
     TestApp = MyApplication().run()
 
 
