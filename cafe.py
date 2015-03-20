@@ -42,10 +42,16 @@ class myEmployeeForm(npyscreen.ActionFormMinimal):
             utilisateurs.append(util['name'])
         test = utilisateurs.index(test)
         user['users'][test]['account']=user['users'][test]['account']-user['prix']
+        user['users'][test]['nombre']=user['users'][test]['nombre']+1
         user['nombre'] = user['nombre'] + 1
         total = 0
         for util in user['users']:
-            sous.append(util['name'] + " " + str(util['account']*0.01))
+            ligne = ''
+            ligne += util['name']
+            ligne += " "*(12 - len(util['name']))
+            ligne += '{0:+}'.format(util['account']*0.01)
+            ligne += " " * (8-len('{0:+}'.format(util['account']*0.01)))
+            sous.append(ligne + "Nombre de cafe:" + str(util['nombre']))
             total = total + util['account']
 
         sous.append("----------") 
@@ -77,7 +83,12 @@ if __name__ == '__main__':
     total = 0
     for util in user['users']:
         utilisateurs.append(util['name'])
-        sous.append(util['name'] + " " + str(util['account']*0.01))
+        ligne = ''
+        ligne += util['name']
+        ligne += " "*(12 - len(util['name']))
+        ligne += '{0:+}'.format(util['account']*0.01)
+        ligne += " " * (8-len('{0:+}'.format(util['account']*0.01)))
+        sous.append(ligne + "Nombre de cafe:" + str(util['nombre']))
         total = total + util['account']
     sous.append("----------") 
     sous.append("Balance: " + str(-total*0.01))
