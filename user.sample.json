@@ -1,0 +1,22 @@
+{
+    "prix": 20, 
+    "paquets": 4, 
+    "users": [
+        {
+            "nombre": 8, 
+            "account": 207, 
+            "name": "Antoine"
+        }, 
+        {
+            "nombre": 2, 
+            "account": 160, 
+            "name": "Cecille"
+        }, 
+        {
+            "nombre": 0, 
+            "account": -100, 
+            "name": "Bruno"
+        }, 
+    ], 
+    "nombre": 10
+}

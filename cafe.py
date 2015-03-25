@@ -21,6 +21,23 @@ class Listepers(npyscreen.Autocomplete):
 class TitleListepers(npyscreen.TitleText):
     _entry_type = Listepers
 
+def affichage(user):
+    sous = []
+    total = 0
+    for util in user['users']:
+        ligne = ''
+        ligne += util['name']
+        ligne += " "*(12 - len(util['name']))
+        ligne += '{0:+}'.format(util['account']*0.01)
+        ligne += " " * (8-len('{0:+}'.format(util['account']*0.01)))
+        sous.append(ligne + "Nombre de cafe:" + str(util['nombre']))
+        total = total + util['account']
+    sous.append("----------")
+    sous.append("Balance: " + str(-total*0.01))
+    sous.append("Nombre de cafes: " + str(user['nombre']))
+    sous.append("Nombre de paquets: " + str(user['paquets']))
+    sous.append("Cafes par paquet: " + str(user['nombre']//user['paquets']))
+    return sous
 
 
 class myEmployeeForm(npyscreen.ActionFormMinimal):
@@ -44,19 +61,20 @@ class myEmployeeForm(npyscreen.ActionFormMinimal):
         user['users'][test]['account']=user['users'][test]['account']-user['prix']
         user['users'][test]['nombre']=user['users'][test]['nombre']+1
         user['nombre'] = user['nombre'] + 1
-        total = 0
-        for util in user['users']:
-            ligne = ''
-            ligne += util['name']
-            ligne += " "*(12 - len(util['name']))
-            ligne += '{0:+}'.format(util['account']*0.01)
-            ligne += " " * (8-len('{0:+}'.format(util['account']*0.01)))
-            sous.append(ligne + "Nombre de cafe:" + str(util['nombre']))
-            total = total + util['account']
-
-        sous.append("----------") 
-        sous.append("Balance: " + str(-total*0.01))
-        sous.append("Nombre de cafe: " + str(user['nombre']))
+#        total = 0
+#        for util in user['users']:
+#            ligne = ''
+#            ligne += util['name']
+#            ligne += " "*(12 - len(util['name']))
+#            ligne += '{0:+}'.format(util['account']*0.01)
+#            ligne += " " * (8-len('{0:+}'.format(util['account']*0.01)))
+#            sous.append(ligne + "Nombre de cafe:" + str(util['nombre']))
+#            total = total + util['account']
+#
+#        sous.append("----------") 
+#        sous.append("Balance: " + str(-total*0.01))
+#        sous.append("Nombre de cafe: " + str(user['nombre']))
+        sous = affichage(user)
         self.Affichage.values = sous
         self.Name.value = ''
         self.Affichage.display()
@@ -79,20 +97,23 @@ if __name__ == '__main__':
     with open("user.json", "r") as data_file:
         user = json.load(data_file)
     utilisateurs = []
-    sous = []
-    total = 0
+#    sous = []
+#    total = 0
     for util in user['users']:
         utilisateurs.append(util['name'])
-        ligne = ''
-        ligne += util['name']
-        ligne += " "*(12 - len(util['name']))
-        ligne += '{0:+}'.format(util['account']*0.01)
-        ligne += " " * (8-len('{0:+}'.format(util['account']*0.01)))
-        sous.append(ligne + "Nombre de cafe:" + str(util['nombre']))
-        total = total + util['account']
-    sous.append("----------") 
-    sous.append("Balance: " + str(-total*0.01))
-    sous.append("Nombre de cafe: " + str(user['nombre']))
+#        ligne = ''
+#        ligne += util['name']
+#        ligne += " "*(12 - len(util['name']))
+#        ligne += '{0:+}'.format(util['account']*0.01)
+#        ligne += " " * (8-len('{0:+}'.format(util['account']*0.01)))
+#        sous.append(ligne + "Nombre de cafe:" + str(util['nombre']))
+#        total = total + util['account']
+#    sous.append("----------") 
+#    sous.append("Balance: " + str(-total*0.01))
+#    sous.append("Nombre de cafes: " + str(user['nombre']))
+#    sous.append("Nombre de paquets: " + str(user['paquets']))
+#    sous.append("Cafes par paquet: " + str(user['nombre']//user['paquets']))
+    sous = affichage(user)
     TestApp = MyApplication().run()
 
 
