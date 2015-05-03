@@ -8,6 +8,7 @@ class Listepers(npyscreen.Autocomplete):
         self.handlers.update({curses.ascii.NL: self.auto_complete})
         self.handlers.update({curses.ascii.CR: self.auto_complete})
         self.handlers.update({"^N": self.parent.new_pack})
+	self.handlers.update({"^E": self.parent.manage})
     def auto_complete(self, input):
         possibilities = filter(lambda x: x.upper().startswith(self.value.upper()), utilisateurs)
         if len(possibilities) is 1:
@@ -44,7 +45,30 @@ def affichage(user):
 
     return sous
 
-
+class manageSous(npyscreen.ActionFormMinimal):
+    def create(self):
+       self.Name1 = self.add(TitleListepers, use_two_lines=True,begin_entry_at=0, name='Donneur')
+       self.Name2 = self.add(TitleListepers, use_two_lines=True,begin_entry_at=0, name='Receveur')
+       self.Somme = self.add(npyscreen.TitleText, use_two_lines=True,begin_entry_at=0, name="Somme")
+    def new_pack(self,input):
+	pass
+    def manage(self,input):
+        pass
+    def on_ok(self):
+        user = []
+        with open("user.json", "r") as data_file:
+            user = json.load(data_file)
+        utilisateurs = []
+        sous = []
+        for util in user['users']:
+            utilisateurs.append(util['name'])
+        test1 = utilisateurs.index(self.Name1.value)
+        test2 = utilisateurs.index(self.Name2.value)
+        user['users'][test1]['account']=user['users'][test1]['account']-int(self.Somme.value)
+        user['users'][test2]['account']=user['users'][test2]['account']+int(self.Somme.value)
+        with open("user.json", "w") as outfile:
+          json.dump(user, outfile, indent=4)
+        self.parentApp.switchFormPrevious()
 class myEmployeeForm(npyscreen.ActionFormMinimal):
     def create_control_buttons(self):
         pass
@@ -53,6 +77,11 @@ class myEmployeeForm(npyscreen.ActionFormMinimal):
        self.Name = self.add(TitleListepers, use_two_lines=True,begin_entry_at=0, name='Name')
        #self.Name = self.add(npyscreen.TitleSelectOne, scroll_exit=True, max_height=3, name='Name', values = utilisateurs)
        self.Affichage = self.add(npyscreen.TitlePager, values=sous, use_two_lines=True,begin_entry_at=0, name='Comptes',editable=False)
+    def manage(self,input):
+        self.parentApp.getForm('MANAGESOUS').Name1.value = ''
+        self.parentApp.getForm('MANAGESOUS').Name2.value = ''
+        self.parentApp.getForm('MANAGESOUS').Somme.valuex = ''
+        self.parentApp.switchForm('MANAGESOUS')
     def new_pack(self,input):
         user = []
         with open("user.json", "r") as data_file:
@@ -86,11 +115,11 @@ class myEmployeeForm(npyscreen.ActionFormMinimal):
         with open("user.json", "w") as outfile:
           json.dump(user, outfile, indent=4)
 
-        
 
 class MyApplication(npyscreen.NPSAppManaged):
    def onStart(self):
        self.addForm('MAIN', myEmployeeForm, name='Gestion du Cafe')
+       self.addForm("MANAGESOUS", manageSous)
    def onInMainLoop(self):
        pass
 
