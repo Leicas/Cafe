@@ -10,15 +10,15 @@ class Listepers(npyscreen.Autocomplete):
         self.handlers.update({"^N": self.parent.new_pack})
 	self.handlers.update({"^E": self.parent.manage})
     def auto_complete(self, input):
-        possibilities = filter(lambda x: x.upper().startswith(self.value.upper()), utilisateurs)
-        if len(possibilities) is 1:
-             if self.value != possibilities[0]:
-                    self.value = possibilities[0]
-             else:
-                 self.parent._on_ok()
-        if len(possibilities) > 1:
-            self.value = possibilities[self.get_choice(possibilities)]
-
+        if self.value != "":
+                possibilities = filter(lambda x: x.upper().startswith(self.value.upper()), utilisateurs)
+                if len(possibilities) is 1:
+                   if self.value != possibilities[0]:
+                       self.value = possibilities[0]
+                   else:
+                        self.parent._on_ok()
+                if len(possibilities) > 1:
+                        self.value = possibilities[self.get_choice(possibilities)]
         self.cursor_position=len(self.value)
 class TitleListepers(npyscreen.TitleText):
     _entry_type = Listepers
@@ -46,6 +46,9 @@ def affichage(user):
     return sous
 
 class manageSous(npyscreen.ActionFormMinimal):
+    def set_up_handlers(self):
+        super(npyscreen.ActionFormMinimal, self).set_up_handlers()
+        self.handlers.update({curses.ascii.ESC:  self.parentApp.switchFormPrevious})
     def create(self):
        self.Name1 = self.add(TitleListepers, use_two_lines=True,begin_entry_at=0, name='Donneur')
        self.Name2 = self.add(TitleListepers, use_two_lines=True,begin_entry_at=0, name='Receveur')
@@ -55,19 +58,20 @@ class manageSous(npyscreen.ActionFormMinimal):
     def manage(self,input):
         pass
     def on_ok(self):
-        user = []
-        with open("user.json", "r") as data_file:
-            user = json.load(data_file)
-        utilisateurs = []
-        sous = []
-        for util in user['users']:
-            utilisateurs.append(util['name'])
-        test1 = utilisateurs.index(self.Name1.value)
-        test2 = utilisateurs.index(self.Name2.value)
-        user['users'][test1]['account']=user['users'][test1]['account']-int(self.Somme.value)
-        user['users'][test2]['account']=user['users'][test2]['account']+int(self.Somme.value)
-        with open("user.json", "w") as outfile:
-          json.dump(user, outfile, indent=4)
+        if self.Name1.value != "":
+                user = []
+                with open("user.json", "r") as data_file:
+                 user = json.load(data_file)
+                utilisateurs = []
+                sous = []
+                for util in user['users']:
+                 utilisateurs.append(util['name'])
+                test1 = utilisateurs.index(self.Name1.value)
+                test2 = utilisateurs.index(self.Name2.value)
+                user['users'][test1]['account']=user['users'][test1]['account']-int(self.Somme.value)
+                user['users'][test2]['account']=user['users'][test2]['account']+int(self.Somme.value)
+                with open("user.json", "w") as outfile:
+                 json.dump(user, outfile, indent=4)
         self.parentApp.switchFormPrevious()
 class myEmployeeForm(npyscreen.ActionFormMinimal):
     def create_control_buttons(self):
