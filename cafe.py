@@ -1,5 +1,7 @@
 import json, npyscreen
 import curses
+import time
+from datetime import datetime
 
 class Listepers(npyscreen.Autocomplete):
     def set_up_handlers(self):
@@ -32,8 +34,8 @@ def affichage(user):
         ligne += " "*(12 - len(util['name']))
         ligne += '{0:+}'.format(util['account']*0.01)
         ligne += " " * (8-len('{0:+}'.format(util['account']*0.01)))
-        sous.append(ligne + "Nombre de cafe:" + str(util['nombre']))
-        total = total + util['account']
+        sous.append(ligne + "Nombre de cafe:" + str(util['nombre'])+ " "*(3-len(str(util['nombre'])))+  " Dernier pris a " + datetime.fromtimestamp(util['date']).strftime("%H:%M:%S le %d/%m/%Y"))
+	total = total + util['account']
     sous.append("----------")
     sous.append("Balance: " + str(-total*0.01))
     sous.append("Paquet en cours: " + str(user['current']))
@@ -110,7 +112,8 @@ class myEmployeeForm(npyscreen.ActionFormMinimal):
         test = utilisateurs.index(test)
         user['users'][test]['account']=user['users'][test]['account']-user['prix']
         user['users'][test]['nombre']=user['users'][test]['nombre']+1
-        user['nombre'] = user['nombre'] + 1
+        user['users'][test]['date'] = time.time()
+	user['nombre'] = user['nombre'] + 1
 	user['current'] = user['current'] + 1
         sous = affichage(user)
         self.Affichage.values = sous
