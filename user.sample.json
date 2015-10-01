@@ -4,19 +4,19 @@
     "paquets": 9, 
     "users": [
         {
-	    "date": 0
+	    "date": 0,
             "nombre": 27, 
             "account": -173, 
             "name": "Antoine"
         }, 
         {
-            "date": 0
+            "date": 0,
             "nombre": 2, 
             "account": 160, 
             "name": "Cecille"
         }, 
         {
-            "date": 0
+            "date": 0,
             "nombre": 0, 
             "account": -100, 
             "name": "Bruno"
